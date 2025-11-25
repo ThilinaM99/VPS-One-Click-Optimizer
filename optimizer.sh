@@ -70,18 +70,29 @@ fun_bar() {
         eval "$command" > /dev/null 2>&1
         touch $HOME/fim
     ) &
+    local pid=$!
     tput civis
     echo -ne "  ${BOLD}${CYAN}▶${NC} ${BOLD}${YELLOW}$title${NC} ${CYAN}│${NC} ${YELLOW}["
-    while true; do
-        for ((i = 0; i < 20; i++)); do
+    
+    # Fill progress bar while waiting for command
+    local bar_length=0
+    while kill -0 $pid 2>/dev/null; do
+        if [[ $bar_length -lt 20 ]]; then
             echo -ne "${GREEN}█"
-            sleep 0.08
-        done
-        if [[ -e "$HOME/fim" ]]; then
-            rm "$HOME/fim"
-            break
+            ((bar_length++))
+            sleep 0.1
+        else
+            sleep 0.2
         fi
     done
+    
+    # Complete the remaining bar if needed
+    while [[ $bar_length -lt 20 ]]; do
+        echo -ne "${GREEN}█"
+        ((bar_length++))
+    done
+    
+    [[ -e "$HOME/fim" ]] && rm "$HOME/fim"
     echo -e "${YELLOW}]${NC} ${GREEN}✓${NC} ${BOLD}${GREEN}DONE${NC}"
     tput cnorm
 }
