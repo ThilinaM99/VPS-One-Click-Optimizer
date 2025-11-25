@@ -65,6 +65,7 @@ ask_bbr_version_1() {
 fun_bar() {
     local title="$1"
     local command="$2"
+    local max_bar=20
     (
         [[ -e $HOME/fim ]] && rm $HOME/fim
         eval "$command" > /dev/null 2>&1
@@ -72,22 +73,22 @@ fun_bar() {
     ) &
     local pid=$!
     tput civis
-    echo -ne "  ${BOLD}${CYAN}▶${NC} ${BOLD}${YELLOW}$title${NC} ${CYAN}│${NC} ${YELLOW}["
+    printf "  ${BOLD}${CYAN}▶${NC} ${BOLD}${YELLOW}%-40s${NC} ${CYAN}│${NC} ${YELLOW}[" "$title"
     
     # Fill progress bar while waiting for command
     local bar_length=0
     while kill -0 $pid 2>/dev/null; do
-        if [[ $bar_length -lt 20 ]]; then
+        if [[ $bar_length -lt $max_bar ]]; then
             echo -ne "${GREEN}█"
             ((bar_length++))
-            sleep 0.1
+            sleep 0.12
         else
-            sleep 0.2
+            sleep 0.3
         fi
     done
     
     # Complete the remaining bar if needed
-    while [[ $bar_length -lt 20 ]]; do
+    while [[ $bar_length -lt $max_bar ]]; do
         echo -ne "${GREEN}█"
         ((bar_length++))
     done
