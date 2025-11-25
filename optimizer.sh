@@ -947,8 +947,8 @@ speedtestcli() {
     clear
     title="Speedtest CLI"
     logo
-    echo && echo -e "${MAGENTA}${title}${NC}"
-    echo && echo -e "\e[93m+-------------------------------------+\e[0m"
+    echo && echo -e "${MAGENTA}📊 ${title}${NC}"
+    echo && echo -e "\e[93m╔═════════════════════════════════════╗\e[0m"
     
     if ! _exists speedtest; then
         local pkg_manager=""
@@ -971,6 +971,12 @@ speedtestcli() {
         echo -e "${YELLOW}Installing Speedtest CLI...${NC}"
         if curl -s --max-time 30 "$speedtest_install_script" | bash; then
             echo -e "${GREEN}Speedtest repository added successfully.${NC}"
+            
+            # Update package cache after adding repository
+            echo -e "${YELLOW}Updating package cache...${NC}"
+            if ! $pkg_manager update -y; then
+                log_warn "Failed to update package cache, attempting installation anyway..."
+            fi
         else
             log_error "Failed to add the Speedtest repository."
             return 1
@@ -978,13 +984,14 @@ speedtestcli() {
         
         if ! $pkg_manager install -y speedtest; then
             log_error "Failed to install Speedtest."
+            log_warn "You can try installing manually with: $pkg_manager install -y speedtest"
             return 1
         fi
     fi
     
     if _exists speedtest; then
         echo && echo -e "${YELLOW}Running Speedtest...${NC}"
-        speedtest
+        echo && speedtest
     else
         log_error "Speedtest is not installed."
         return 1
