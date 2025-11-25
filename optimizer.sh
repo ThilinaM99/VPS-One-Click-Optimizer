@@ -64,32 +64,25 @@ ask_bbr_version_1() {
 }
 fun_bar() {
     local title="$1"
-    local command1="$2"
-    local command2="$3"
+    local command="$2"
     (
         [[ -e $HOME/fim ]] && rm $HOME/fim
-        $command1 -y > /dev/null 2>&1
-        $command2 -y > /dev/null 2>&1
+        eval "$command" > /dev/null 2>&1
         touch $HOME/fim
     ) &
     tput civis
-    echo -ne "  ${BOLD}${YELLOW}$title${BOLD} - ${YELLOW}["
+    echo -ne "  ${BOLD}${CYAN}▶${NC} ${BOLD}${YELLOW}$title${NC} ${CYAN}│${NC} ${YELLOW}["
     while true; do
-        for ((i = 0; i < 18; i++)); do
-            echo -ne "${RED}#"
-            sleep 0.1
+        for ((i = 0; i < 20; i++)); do
+            echo -ne "${GREEN}█"
+            sleep 0.08
         done
         if [[ -e "$HOME/fim" ]]; then
             rm "$HOME/fim"
             break
         fi
-        echo -e "${YELLOW}]"
-        sleep 0.5
-        tput cuu1
-        tput el 
-        echo -ne "  ${BOLD}${YELLOW}$title${BOLD} - ${YELLOW}["
     done
-    echo -e "${YELLOW}]${WHITE} -${GREEN} DONE!${WHITE}"
+    echo -e "${YELLOW}]${NC} ${GREEN}✓${NC} ${BOLD}${GREEN}DONE${NC}"
     tput cnorm
 }
 if [ "$EUID" -ne 0 ]; then
@@ -348,8 +341,8 @@ fix_dns() {
     clear
     title="DNS Replacement"
     logo
-    echo && echo -e "${MAGENTA}$title${NC}"
-    echo && printf "\e[93m+-------------------------------------+\e[0m\n"
+    echo && echo -e "${MAGENTA}🌐 $title${NC}"
+    echo && printf "\e[93m╔═════════════════════════════════════╗\e[0m\n"
     interface_name=$(ip -o link show | awk '/state UP/ {print $2}' | sed 's/:$//')
     if [ -z "$interface_name" ]; then
         echo && echo -e "${RED}Error: Could not determine network interface.${NC}"
@@ -405,8 +398,8 @@ complete_update() {
     clear
     title="Update and upgrade packages"
     logo
-    echo && echo -e "${CYAN}$title ${NC}"
-    echo && printf "\e[93m+-------------------------------------+\e[0m\n" 
+    echo && echo -e "${CYAN}📦 $title ${NC}"
+    echo && printf "\e[93m╔═════════════════════════════════════╗\e[0m\n" 
     echo && echo -e "${RED}Please wait, it might take a couple of minutes${NC}" && echo
     
     if ! apt-get update; then
@@ -444,8 +437,8 @@ swap_maker() {
     clear
     title="Setup and Configure Swap File to Boost Performance"
     logo
-    echo && echo -e "${MAGENTA}$title${NC}"
-    echo && printf "\e[93m+-------------------------------------+\e[0m\n"
+    echo && echo -e "${MAGENTA}💾 $title${NC}"
+    echo && printf "\e[93m╔═════════════════════════════════════╗\e[0m\n"
     
     existing_swap=$(swapon -s | awk '$1 !~ /^Filename/ {print $1}')
     if [[ -n "$existing_swap" ]]; then
@@ -581,8 +574,8 @@ remove_old_sysctl() {
     clear
     title=" Network Optimizing "
     logo
-    echo && echo -e "${MAGENTA}$title${NC}"
-    echo && echo -e "\e[93m+-------------------------------------+\e[0m"
+    echo && echo -e "${MAGENTA}🌍 $title${NC}"
+    echo && echo -e "\e[93m╔═════════════════════════════════════╗\e[0m"
     sed -i '/1000000/d' /etc/profile
 cat <<EOL > /etc/sysctl.conf
 # System Configuration Settings for Improved Performance and Security
@@ -697,8 +690,8 @@ optimize_ssh_configuration() {
     SSH_PATH="/etc/ssh/sshd_config"
     title="Improve SSH Configuration and Optimize SSHD"
     logo
-    echo && echo -e "${MAGENTA}$title${NC}\n"
-    echo && echo -e "\e[93m+-------------------------------------+\e[0m\n"
+    echo && echo -e "${MAGENTA}🔐 $title${NC}\n"
+    echo && echo -e "\e[93m╔═════════════════════════════════════╗\e[0m\n"
     
     if [ ! -f "$SSH_PATH" ]; then
         log_error "SSH configuration file not found at ${SSH_PATH}."
@@ -833,9 +826,9 @@ ask_bbr_version() {
     title="TCP Congestion Control Optimization"
     logo
     echo ""
-    echo -e "${MAGENTA}${title}${NC}"
+    echo -e "${MAGENTA}🚀 ${title}${NC}"
     echo ""
-    echo -e "\e[93m+-------------------------------------+\e[0m"
+    echo -e "\e[93m╔═════════════════════════════════════╗\e[0m"
     echo ""
     echo -e "${RED}TIP!${NC}"
     echo -e "$GREEN FQ (Fair Queuing):${NC} Allocates bandwidth fairly among flows; good for balancing latency and throughput."
@@ -1038,21 +1031,21 @@ while true; do
     yt_title="youtube.com/@opiran-institute"
     logo
     echo -e "\e[93m╔═══════════════════════════════════════════════╗\e[0m"  
-    echo -e "\e[93m║            \e[94mVPS OPTIMIZER                      \e[93m║\e[0m"   
+    echo -e "\e[93m║  ${BOLD}${CYAN}⚡ VPS OPTIMIZER v3.0 ⚡${NC}${YELLOW}              \e[93m║\e[0m"   
     echo -e "\e[93m╠═══════════════════════════════════════════════╣\e[0m"
-    echo && echo -e "${BLUE}   ${tg_title}   ${NC}"
-    echo -e "${BLUE}   ${yt_title}   ${NC}"
-    echo && echo -e "\e[93m+-----------------------------------------------+\e[0m" 
-    echo && printf "${GREEN} 1)${NC} Optimizer (1-click)${NC}\n"
-    printf "${GREEN} 2)${NC} Optimizer (step by step)${NC}\n"
-    echo && printf "${GREEN} 3)${NC} Swap Management${NC}\n"
-    printf "${GREEN} 4)${NC} Grub Tuning${NC}\n"
-    printf "${GREEN} 5)${NC} BBR Optimization${NC}\n"
-    echo && printf "${GREEN} 6)${NC} Speedtest${NC}\n"
-    printf "${GREEN} 7)${NC} Benchmark VPS${NC}\n"
-    echo && echo -e "\e[93m+-----------------------------------------------+\e[0m" 
-    echo && printf "${GREEN} E)${NC} Exit the menu${NC}\n"
-    echo && echo -ne "${GREEN}Select an option [1-7, E]: ${NC}"
+    echo && echo -e "${BLUE}   🔗 ${tg_title}   ${NC}"
+    echo -e "${BLUE}   📺 ${yt_title}   ${NC}"
+    echo && echo -e "\e[93m╠═══════════════════════════════════════════════╣\e[0m" 
+    echo && printf "${GREEN}  ⚙️  1)${NC} Optimizer (1-click)${NC}\n"
+    printf "${GREEN}  🔧 2)${NC} Optimizer (step by step)${NC}\n"
+    echo && printf "${GREEN}  💾 3)${NC} Swap Management${NC}\n"
+    printf "${GREEN}  🖥️  4)${NC} Grub Tuning${NC}\n"
+    printf "${GREEN}  🚀 5)${NC} BBR Optimization${NC}\n"
+    echo && printf "${GREEN}  📊 6)${NC} Speedtest${NC}\n"
+    printf "${GREEN}  📈 7)${NC} Benchmark VPS${NC}\n"
+    echo && echo -e "\e[93m╠═══════════════════════════════════════════════╣\e[0m" 
+    echo && printf "${RED}  ❌ E)${NC} Exit the menu${NC}\n"
+    echo && echo -ne "${CYAN}  ➤ Select an option [1-7, E]: ${NC}"
     read -r choice
     
     case "$choice" in

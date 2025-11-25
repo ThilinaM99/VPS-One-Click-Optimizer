@@ -1,0 +1,74 @@
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+*.temp
+
+# Log files
+*.log
+logs/
+
+# Test files
+test_*.sh
+*.test
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS specific
+.AppleDouble
+.LSOverride
+._*
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Local development
+.env
+.env.local
+.env.*.local
+
+# Temporary directories
+tmp/
+temp/
+.tmp/
+
+# Documentation build
+docs/_build/
+site/
+
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+
+# Lock files (except package-lock.json for Node)
+Gemfile.lock
+poetry.lock
