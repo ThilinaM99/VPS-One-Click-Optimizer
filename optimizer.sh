@@ -107,9 +107,9 @@ sourcelist() {
     title="Source List Adjustment to Official Repositories"
     logo 
     echo ""
-    echo -e "${MAGENTA}$title${NC}"
+    echo -e "${MAGENTA}📚 $title${NC}"
     echo ""
-    echo -e "\e[93m+-------------------------------------+\e[0m"
+    echo -e "\e[93m╔═════════════════════════════════════╗\e[0m"
     echo ""
 
     cp /etc/apt/sources.list /etc/apt/sources.list.bak || {
@@ -271,8 +271,8 @@ set_timezone() {
     clear
     title="Timezone Adjustment"
     logo 
-    echo && printf "${MAGENTA}%s ${NC}\n" "$title"
-    echo && printf "\e[93m+-------------------------------------+\e[0m\n"
+    echo && printf "${MAGENTA}🕐 %s ${NC}\n" "$title"
+    echo && printf "\e[93m╔═════════════════════════════════════╗\e[0m\n"
     current_timezone=$(timedatectl | awk '/Time zone/ {print $3}')
     echo && printf "${YELLOW}Your current timezone is ${GREEN}%s${NC}\n" "$current_timezone"
     
@@ -435,8 +435,8 @@ installations() {
     clear
     title="Install necessary packages"
     logo
-    echo && echo -e "${MAGENTA}$title ${NC}"
-    echo && printf "\e[93m+-------------------------------------+\e[0m\n"
+    echo && echo -e "${MAGENTA}📦 $title ${NC}"
+    echo && printf "\e[93m╔═════════════════════════════════════╗\e[0m\n"
     echo && echo -e "${YELLOW}Please wait, it might take a while${NC}"
     apt-get install jq nload nethogs autossh ssh iperf software-properties-common apt-transport-https \
                     lsb-release ca-certificates gnupg2 bash-completion curl git unzip \
@@ -776,8 +776,8 @@ grub_tuning() {
   clear
   logo
   title="CPU Optimizing and Tuning (GRUB)"
-  echo && echo -e "${MAGENTA}$title${NC}"
-  echo && echo -e "\e[93m+-------------------------------------+\e[0m\n"
+  echo && echo -e "${MAGENTA}🖥️  $title${NC}"
+  echo && echo -e "\e[93m╔═════════════════════════════════════╗\e[0m\n"
   cp /etc/default/grub /etc/default/grub.bak
   echo && echo -e "${YELLOW}Backup of the original grub configuration created at /etc/default/grub.bak${NC}" && echo
   modify_grub_param() {
@@ -1002,8 +1002,8 @@ benchmark() {
     clear
     title="Benchmark (Network Speed Test)"
     logo
-    echo && echo -e "${MAGENTA}${title}${NC}"
-    echo && echo -e "\e[93m+-------------------------------------+\e[0m"
+    echo && echo -e "${MAGENTA}📈 ${title}${NC}"
+    echo && echo -e "\e[93m╔═════════════════════════════════════╗\e[0m"
     
     if ! _exists wget; then
         echo -e "${YELLOW}Installing wget...${NC}"
@@ -1036,12 +1036,12 @@ benchmark() {
 final() {
     clear
     logo
-    echo && echo -e "    ${MAGENTA}Your server has been fully optimized successfully!${NC}"
-    printf "\e[93m+-------------------------------------+\e[0m\n" 
-    echo && echo -e "${MAGENTA}Please reboot the system to apply all changes:${NC}"
+    echo && echo -e "    ${MAGENTA}✅ Your server has been fully optimized successfully!${NC}"
+    printf "\e[93m╔═════════════════════════════════════╗\e[0m\n" 
+    echo && echo -e "${MAGENTA}🔄 Please reboot the system to apply all changes:${NC}"
     echo -e "${GREEN}  reboot${NC}"
-    echo && echo -e "${MAGENTA}For more information, visit:${NC} ${GREEN}https://t.me/OPIranCluB${NC}"
-    echo && printf "\e[93m+-------------------------------------+\e[0m\n" 
+    echo && echo -e "${MAGENTA}📱 For more information, visit:${NC} ${GREEN}https://t.me/OPIranCluB${NC}"
+    echo && printf "\e[93m╚═════════════════════════════════════╝\e[0m\n" 
     echo && ask_reboot
 }
 while true; do
